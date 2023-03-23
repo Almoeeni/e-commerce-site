@@ -4,6 +4,9 @@ from django.db import models
 class Category(models.Model):
     title = models.CharField(max_length=200)
 
+    def __str__(self) -> str:
+        return self.title
+
 class Product(models.Model):
     title = models.CharField(max_length=200)
     price = models.FloatField()
@@ -11,3 +14,6 @@ class Product(models.Model):
     decription = models.TextField()
     category = models.ForeignKey(Category,on_delete=models.CASCADE)
     image = models.CharField(max_length=300)
+
+    def __str__(self) -> str:
+        return self.title
