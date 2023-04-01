@@ -109,7 +109,6 @@
         for (x in cartObject) {
             cartString += cartIndex + " "; // add a space here
             cartString += cartObject[x][1] + " Qty: " + cartObject[x][0] + "</br>";
-            //cartString += document.getElementById('nm' + x).innerHTML + "Qty:" + cart[x][0] + "</br>";
             cartIndex += 1;
         }
         cartString += "<a href='/checkout' class='btn btn-info' id='checkout'>Checkout</a>";
