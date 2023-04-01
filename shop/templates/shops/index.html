@@ -23,6 +23,7 @@
 
 <body>
     <div class="container">
+        {% include 'shops/nav.html' %}
         <div class="row">
             <div class="col-md-12">
                 <form class="card card-sm">
@@ -45,11 +46,11 @@
                 <div class="card">
                     <img src="{{products.image}}" alt="" class="card-img-top">
                     <div class="card-body">
-                        <div class="card-title">
+                        <div id="nm{{products.id}}" class="card-title">
                             {{products.title}}
                         </div>
-                        <div class="card-text">
-                            $ {{products.price}}
+                        <div class="card-text" id="price{{products.id}}">
+                            {{products.price}}
                         </div>
                         <a href="detail/{{products.id}}" class="btn btn-warning">View</a>
                         <button id="{{products.id}}" class="btn btn-warning atc">Add to cart</button>
@@ -79,6 +80,43 @@
 
     $(document).on('click', '.atc', function () {
         var item_id = this.id.toString()
-        console.log(item_id);
-    })
+
+        if (cart[item_id] != undefined) {
+            quantity = cart[item_id][0] + 1;
+            cart[item_id][0] = quantity;
+            cart[item_id][2] += $.trim($("#price" + item_id).html())
+
+        }
+        else {
+            quantity = 1;
+            name = $.trim($('#nm' + item_id).html())
+            cart[item_id] = [quantity, name]
+            cart[item_id][2] = $.trim($("#price" + item_id).html())
+        }
+
+        localStorage.setItem('cart', JSON.stringify(cart));
+
+        car_count(cart)
+    });
+
+    DisplayCart(cart);
+    function DisplayCart(cart) {
+        car_count(cart)
+        var cartString = "";
+        cartString += "<h5>This is your Cart</h5>";
+        let cartObject = JSON.parse(localStorage.getItem('cart'))
+        var cartIndex = 1;
+        for (x in cartObject) {
+            cartString += cartIndex + " "; // add a space here
+            cartString += cartObject[x][1] + " Qty: " + cartObject[x][0] + "</br>";
+            //cartString += document.getElementById('nm' + x).innerHTML + "Qty:" + cart[x][0] + "</br>";
+            cartIndex += 1;
+        }
+        cartString += "<a href='/checkout' class='btn btn-info' id='checkout'>Checkout</a>";
+        $("#cart").attr('data-content', cartString);
+        $('[data-toggle="popover"]').popover();
+    }
+    function car_count(cart) {
+        return $('#cart').html("Cart " + Object.keys(cart).length)
+    }
 </script>
